@@ -773,6 +773,15 @@ class DPEngineCoreProc(EngineCoreProc):
         _add_prefix(sys.stdout, process_name, pid)
         _add_prefix(sys.stderr, process_name, pid)
 
+        # Counts forward-passes of the model so that we can synchronize
+        # finished with DP peers every N steps.
+        self.counter = 0
+
+        # Initialize the engine.
+        self.dp_rank = vllm_config.parallel_config.data_parallel_rank
+        super().__init__(vllm_config, on_head_node, input_address,
+                         executor_class, log_stats, self.dp_rank)
+
     def _init_data_parallel(self, vllm_config: VllmConfig):
 
         # Configure GPUs and stateless process group for data parallel.
