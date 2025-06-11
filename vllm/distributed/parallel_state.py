@@ -1075,9 +1075,6 @@ def initialize_model_parallel(
         _DP.rank_in_group, _PP.rank_in_group, _TP.rank_in_group,
         _EP.rank_in_group)
 
-    if enable_expert_parallel:
-        pplx_init(rank, world_size)
-
     global _LM_HEAD_TP
     assert _LM_HEAD_TP is None, ("lm head tensor model parallel group is already initialized")
     lm_tp  = 1
